@@ -8,8 +8,8 @@ from boto3.dynamodb.conditions import Key, Attr
 dynomdb = boto3.resource('dynamodb', endpoint_url="http://localhost:4566")
 table = dynomdb.Table('Bins_Salerno')
     
-#def handler(event, context):
-def test():
+def handler(event, context):
+#def test():
 
     #Scan for all items in the DB for find all device's id
     response = table.scan()
@@ -34,7 +34,17 @@ def test():
         print(response['Items'][0])
         last_measuremenst.append(response['Items'][0])
     
-    return last_measuremenst
+    response = {
+        "isBase64Encoded": True,
+        'statusCode': 200,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        },
+        'body': json.dumps(last_measuremenst),
+    }
+
+    return response
 
     '''
     operation = event['operation']
@@ -63,5 +73,3 @@ PAYLOAD EXAMPLE
     }
 }
 '''
-
-test()
