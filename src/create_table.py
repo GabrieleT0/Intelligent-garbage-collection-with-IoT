@@ -7,13 +7,21 @@ table = dynamodb.create_table(
     KeySchema=[
         {
             'AttributeName': 'device_id',
-            'KeyType': 'HASH'
+            'KeyType': 'HASH'   # Partition Key
+        },
+        {
+            'AttributeName': 'measure_date',
+            'KeyType': 'RANGE'  # Sort Key
         }
     ],
     AttributeDefinitions=[
         {
             'AttributeName': 'device_id',
             'AttributeType': 'N'
+        },
+        {
+            'AttributeName': 'measure_date',
+            'AttributeType': 'S' 
         }
     ],
     ProvisionedThroughput={
