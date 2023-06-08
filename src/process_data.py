@@ -2,6 +2,7 @@ import boto3
 import datetime
 import json
 
+EMPTY = 2.0
 LOW = 10.0
 MEDIUM = 25.00
 HIGH = 45.00
@@ -22,6 +23,8 @@ def test():
         for message in messages:
             content = json.loads(message.body)
             kg = float(content['kilograms'])
+            if(kg <= EMPTY):
+                level = 'EMPTY'
             if(kg <= LOW):
                 level = 'LOW'
             elif(kg <= MEDIUM):
@@ -35,7 +38,8 @@ def test():
                 'device_id': int(content['device_id']),
                 'latitude': content['latitude'],
                 'longitude': content['longitude'],
-                'trash_level': level
+                'trash_level': level,
+                'measure_date': content['measure_date']
             }
             table.put_item(Item=item)
             message.delete()
