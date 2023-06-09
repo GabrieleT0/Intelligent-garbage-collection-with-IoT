@@ -9,7 +9,7 @@ FAILURE_RATE = 0.08
 def test():
     sqs = boto3.resource('sqs', endpoint_url='http://localhost:4566')
     sns_client = boto3.client('sns',endpoint_url='http://localhost:4566')
-    topicArn = 'arn:aws:sns:us-east-2:000000000000:sensor_error'
+    topicArn = 'arn:aws:sns:us-east-1:000000000000:sensor_error'
     
     #load info of our simulated IoT device from a JSON file
     with open('IoTDevices_info.json','r') as f:
