@@ -1,0 +1,23 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "API Gateway Example",
+      "version": "1.0"
+    },
+    "paths": {
+      "/resource": {
+        "get": {
+          "x-amazon-apigateway-integration": {
+            "type": "aws_proxy",
+            "uri": "arn:aws:lambda:us-east-1:000000000000:function:apigw-lambda"
+          }
+        },
+        "post": {
+          "x-amazon-apigateway-integration": {
+            "type": "aws_proxy",
+            "uri": "arn:aws:lambda:us-east-1:000000000000:function:apigw-lambda2"
+          }
+        }
+      }
+    }
+  }
