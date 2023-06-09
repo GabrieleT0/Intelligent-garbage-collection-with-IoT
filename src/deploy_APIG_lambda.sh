@@ -8,11 +8,24 @@ aws lambda create-function \
     --role arn:aws:iam::111111111111:role/apigw \
     --endpoint-url http://localhost:4566 >/dev/null
 
+zip function2.zip measurements_by_id.py
+aws lambda create-function \
+    --function-name apigw-lambda2 \
+    --runtime python3.8 \
+    --handler measurements_by_id.lambda_handler\
+    --memory-size 128 \
+    --zip-file fileb://function2.zip \
+    --role arn:aws:iam::111111111111:role/apigw \
+    --endpoint-url http://localhost:4566 >/dev/null
 
-output=$(aws apigateway create-rest-api --name 'API Gateway Lambda integration' --endpoint-url http://localhost:4566)
+
+output=$(aws apigateway create-rest-api --name 'API Gateway Lambda integration' --endpoint-url http://localhost:4566 )
 
 REST_API_ID=$(echo "$output" | jq -r '.id')
 echo 'REST_API_ID:'$REST_API_ID
+
+aws --endpoint-url=http://localhost:4566 apigateway put-rest-api --rest-api-id $REST_API_ID --mode merge --body file://swagger.json
+
 
 output=$(aws apigateway get-resources --rest-api-id $REST_API_ID --endpoint-url http://localhost:4566)
 
@@ -37,6 +50,14 @@ aws apigateway put-method \
   --authorization-type "NONE" \
   --endpoint-url http://localhost:4566 
 
+aws apigateway put-method \
+  --rest-api-id $REST_API_ID \
+  --resource-id $RESOURCE_ID \
+  --http-method POST \
+  --request-parameters "method.request.path.somethingId=true" \
+  --authorization-type "NONE" \
+  --endpoint-url http://localhost:4566 
+
 aws apigateway put-integration \
   --rest-api-id $REST_API_ID \
   --resource-id $RESOURCE_ID \
@@ -44,6 +65,16 @@ aws apigateway put-integration \
   --type AWS_PROXY \
   --integration-http-method POST \
   --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:apigw-lambda/invocations \
+  --passthrough-behavior WHEN_NO_MATCH \
+  --endpoint-url http://localhost:4566
+
+aws apigateway put-integration \
+  --rest-api-id $REST_API_ID \
+  --resource-id $RESOURCE_ID \
+  --http-method POST \
+  --type AWS_PROXY \
+  --integration-http-method POST \
+  --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:apigw-lambda2/invocations \
   --passthrough-behavior WHEN_NO_MATCH \
   --endpoint-url http://localhost:4566
 

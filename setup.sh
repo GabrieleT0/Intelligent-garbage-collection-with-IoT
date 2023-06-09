@@ -13,3 +13,6 @@ aws sns subscribe --topic-arn $TOPIC_ARN --protocol http --notification-endpoint
 cd src/
 python create_table.py
 sh deploy_APIG_lambda.sh
+cd ..
+python IoTDevices.py
+python src/process_data.py

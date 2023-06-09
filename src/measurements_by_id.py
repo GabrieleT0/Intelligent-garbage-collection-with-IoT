@@ -4,15 +4,25 @@ import random
 import json
 from boto3.dynamodb.conditions import Key, Attr
 
-
-dynomdb = boto3.resource('dynamodb', endpoint_url="http://localhost:4566")
-table = dynomdb.Table('Bins_Salerno')
-
-def handler(event, context):
+def lambda_handler(event, context):
 #def test(id):
+    dynomdb = boto3.resource('dynamodb', endpoint_url="http://localhost:4566")
+    table = dynomdb.Table('Bins_Salerno')
+    
     payload = event.get('payload')
     id = payload['id']
-    response = table.query(KeyConditionExpression=Key('device_id').eq(id),ScanIndexForward = False)
+    
+    result = table.query(KeyConditionExpression=Key('device_id').eq(id),ScanIndexForward = False)
 
-    return response['Items']
+    response = {
+        "isBase64Encoded": False,
+        'statusCode': 200,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        },
+        'body': json.dumps(result['Items']),
+    }
+
+    return response
 

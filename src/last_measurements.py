@@ -3,14 +3,12 @@ import datetime
 import random
 import json
 from boto3.dynamodb.conditions import Key, Attr
-
-
-dynomdb = boto3.resource('dynamodb', endpoint_url="http://localhost:4566")
-table = dynomdb.Table('Bins_Salerno')
     
-def handler(event, context):
+def lambda_handler(event, context):
 #def test():
-
+    dynomdb = boto3.resource('dynamodb', endpoint_url="http://host.docker.internal:4566")
+    table = dynomdb.Table('Bins_Salerno')
+    
     #Scan for all items in the DB for find all device's id
     response = table.scan()
     data = response['Items']
@@ -32,10 +30,13 @@ def handler(event, context):
     for id in ids:
         response = table.query(KeyConditionExpression=Key('device_id').eq(id),ScanIndexForward = False,Limit=1)
         print(response['Items'][0])
+        device_id = str(response['Items'][0]['device_id'])
+        response['Items'][0]['device_id'] = device_id
+        
         last_measuremenst.append(response['Items'][0])
     
     response = {
-        "isBase64Encoded": True,
+        "isBase64Encoded": False,
         'statusCode': 200,
         'headers': {
             'Content-Type': 'application/json',
