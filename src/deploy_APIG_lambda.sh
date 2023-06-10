@@ -24,9 +24,6 @@ output=$(aws apigateway create-rest-api --name 'API Gateway Lambda integration' 
 REST_API_ID=$(echo "$output" | jq -r '.id')
 echo 'REST_API_ID:'$REST_API_ID
 
-aws --endpoint-url=http://localhost:4566 apigateway put-rest-api --rest-api-id $REST_API_ID --mode merge --body file://swagger.json
-
-
 output=$(aws apigateway get-resources --rest-api-id $REST_API_ID --endpoint-url http://localhost:4566)
 
 PARENT_ID=$(echo "$output" | jq -r '.items[0].id')
