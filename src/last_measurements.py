@@ -29,7 +29,6 @@ def lambda_handler(event, context):
     last_measuremenst = []
     for id in ids:
         response = table.query(KeyConditionExpression=Key('device_id').eq(id),ScanIndexForward = False,Limit=1)
-        print(response['Items'][0])
         device_id = str(response['Items'][0]['device_id'])
         response['Items'][0]['device_id'] = device_id
         

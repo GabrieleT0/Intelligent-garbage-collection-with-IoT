@@ -6,13 +6,19 @@ from boto3.dynamodb.conditions import Key, Attr
 
 def lambda_handler(event, context):
 #def test(id):
-    dynomdb = boto3.resource('dynamodb', endpoint_url="http://localhost:4566")
+    dynomdb = boto3.resource('dynamodb', endpoint_url="http://host.docker.internal:4566")
     table = dynomdb.Table('Bins_Salerno')
-    
-    payload = event.get('payload')
+
+    body = json.loads(event['body'])
+    payload = body['payload']
     id = payload['id']
     
-    result = table.query(KeyConditionExpression=Key('device_id').eq(id),ScanIndexForward = False)
+    result = table.query(KeyConditionExpression=Key('device_id').eq(int(id)),ScanIndexForward = False)
+
+    items = result['Items']
+    for item in items:
+        device_id = str(item['device_id'])
+        item['device_id'] = device_id
 
     response = {
         "isBase64Encoded": False,
@@ -25,4 +31,3 @@ def lambda_handler(event, context):
     }
 
     return response
-
