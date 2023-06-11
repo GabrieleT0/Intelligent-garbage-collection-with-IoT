@@ -1,9 +1,23 @@
 //Call the RESTApi to fetch the last measurements
 async function getIoTData(){
-    const response = await fetch("http://localhost:4566/restapis/czm2gpf1uf/test/_user_request_/test")
+    const response = await fetch("http://localhost:4566/restapis/m89b2k9u36/test/_user_request_/test")
     const jsonData = await response.json();
 
     return jsonData
+}
+
+async function getAddress(lat,lon){
+    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`)
+    const jsonData = await response.json();
+
+    return jsonData
+}
+
+function getAddressOnClick(e){
+    //TODO: inserire qui l'indirizzo per migliorare performance, la richiesta sarà fatta al click
+    address = `${address.road}, ${address.city}, ${address.postcode}, ${address.state}, ${address.country}`
+    popupContent = e.target._popup._content
+    e.target._popup._content = 'Ciao'
 }
 
 function createMap(){
@@ -12,22 +26,40 @@ function createMap(){
     //Load IoT devices cordinates and create a marker on the map for each of them
     getIoTData().then(jsonData => {
         jsonData;
+        var BinIcon = L.Icon.extend({
+            options: {
+                iconSize:     [45, 45],
+                shadowSize:   [50, 64],
+                iconAnchor:   [22, 94],
+                shadowAnchor: [4, 62],
+                popupAnchor:  [-3, -76]
+            }
+        });
         for(var i = 0; i < jsonData.length; i++){
             lat = jsonData[i].latitude
             long = jsonData[i].longitude
-            var greenIcon = L.icon({
-                iconUrl: 'img/medium.png',
-                iconSize:     [30, 40], // size of the icon
-                shadowSize:   [50, 64], // size of the shadow
-                iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-                shadowAnchor: [4, 62],  // the same for the shadow
-                popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-            });
-            var marker = L.marker([lat, long],{icon: greenIcon}).addTo(map);
+            if(jsonData[i].trash_level == 'EMPTY'){
+                urlIcon = 'img/empty-bin.png'
+                //message = `<b>Sono vuoto!</b><br>Mi trovo in: <b>${address}</b>.`
+            }
+            else if(jsonData[i].trash_level == 'MEDIUM'){
+                urlIcon = 'img/medium-bin.png'
+                //message = `<b>Sono pieno a metà!</b><br>Mi trovo in: <b>${address}</b>.`
+            }
+            else if(jsonData[i].trash_level == 'HIGH'){
+                urlIcon = 'img/almst-sull-bin.png'
+                //message = `<b>Sono quasi pieno!</b><br>Mi trovo in: <b>${address}</b>.`
+            }
+            else if(jsonData[i].trash_level == 'TO BE EMPTIED'){
+                urlIcon = 'img/full-bin.png'
+                //message = `<b>Sono pieno, vieni a prendermi!</b><br>Mi trovo in: <b>${address}</b>.`
+            }
+            var binIcon = new BinIcon({iconUrl: urlIcon})
+            var marker = L.marker([lat, long],{icon: binIcon}).addTo(map).on('click', getAddressOnClick);
             //Here we can personalize the popup on the marker when it is clicked
-            marker.bindPopup("<b>Ciao, sono un bidone!</b><br>Qui puoi inserire quanto sono pieno.");
+            //marker.bindPopup(message);
         }
-    });
+    })
     //Lastly, render the map
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
