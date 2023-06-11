@@ -1,6 +1,6 @@
 //Call the RESTApi to fetch the last measurements
 async function getIoTData(){
-    const response = await fetch("http://localhost:4566/restapis/m89b2k9u36/test/_user_request_/test")
+    const response = await fetch("http://localhost:4566/restapis/2nw5nxfrqu/test/_user_request_/test")
     const jsonData = await response.json();
 
     return jsonData
@@ -13,11 +13,12 @@ async function getAddress(lat,lon){
     return jsonData
 }
 
-function getAddressOnClick(e){
-    //TODO: inserire qui l'indirizzo per migliorare performance, la richiesta sarà fatta al click
-    address = `${address.road}, ${address.city}, ${address.postcode}, ${address.state}, ${address.country}`
-    popupContent = e.target._popup._content
-    e.target._popup._content = 'Ciao'
+function drawRoute(waypoints){
+    //Waypoints is an array of elements like this: L.latLng(lat, long)
+    L.Routing.control({
+        waypoints: waypoints,
+        routeWhileDragging: true
+    }).addTo(map);
 }
 
 function createMap(){
@@ -35,29 +36,31 @@ function createMap(){
                 popupAnchor:  [-3, -76]
             }
         });
+        //waypoints = []
         for(var i = 0; i < jsonData.length; i++){
             lat = jsonData[i].latitude
             long = jsonData[i].longitude
             if(jsonData[i].trash_level == 'EMPTY'){
                 urlIcon = 'img/empty-bin.png'
-                //message = `<b>Sono vuoto!</b><br>Mi trovo in: <b>${address}</b>.`
+                message = `<b>Sono vuoto!</b>`
             }
             else if(jsonData[i].trash_level == 'MEDIUM'){
                 urlIcon = 'img/medium-bin.png'
-                //message = `<b>Sono pieno a metà!</b><br>Mi trovo in: <b>${address}</b>.`
+                message = `<b>Sono pieno a metà!`
             }
             else if(jsonData[i].trash_level == 'HIGH'){
                 urlIcon = 'img/almst-sull-bin.png'
-                //message = `<b>Sono quasi pieno!</b><br>Mi trovo in: <b>${address}</b>.`
+                message = `<b>Sono quasi pieno!`
             }
             else if(jsonData[i].trash_level == 'TO BE EMPTIED'){
                 urlIcon = 'img/full-bin.png'
-                //message = `<b>Sono pieno, vieni a prendermi!</b><br>Mi trovo in: <b>${address}</b>.`
+                message = `<b>Sono pieno, vieni a prendermi!`
             }
+            //waypoints.push(L.latLng(lat, long))
             var binIcon = new BinIcon({iconUrl: urlIcon})
-            var marker = L.marker([lat, long],{icon: binIcon}).addTo(map).on('click', getAddressOnClick);
+            var marker = L.marker([lat, long],{icon: binIcon}).addTo(map);
             //Here we can personalize the popup on the marker when it is clicked
-            //marker.bindPopup(message);
+            marker.bindPopup(message);
         }
     })
     //Lastly, render the map
