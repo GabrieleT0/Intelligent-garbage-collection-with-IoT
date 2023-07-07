@@ -18,6 +18,39 @@ aws lambda create-function \
     --role arn:aws:iam::111111111111:role/apigw \
     --endpoint-url http://localhost:4566 >/dev/null
 
+zip function3.zip post_topic_messages.py
+aws lambda create-function \
+    --function-name apigw-lambda3 \
+    --runtime python3.8 \
+    --handler post_topic_messages.lambda_handler\
+    --memory-size 128 \
+    --zip-file fileb://function3.zip \
+    --role arn:aws:iam::111111111111:role/apigw \
+    --endpoint-url http://localhost:4566 >/dev/null
+
+zip function4.zip process_data.py
+aws lambda create-function \
+    --function-name apigw-lambda4 \
+    --runtime python3.8 \
+    --handler process_data.lambda_handler\
+    --memory-size 128 \
+    --zip-file fileb://function4.zip \
+    --role arn:aws:iam::111111111111:role/apigw \
+    --timeout 600 \
+    --endpoint-url http://localhost:4566 >/dev/null
+
+aws sns subscribe --protocol lambda \
+  --topic-arn arn:aws:sns:us-east-1:000000000000:sensor_error \
+  --notification-endpoint arn:aws:lambda:us-east-1:000000000000:function:apigw-lambda3 \
+  --endpoint-url http://localhost:4566
+
+aws sns publish --message "Hello World" --subject Test \
+  --topic-arn arn:aws:sns:us-east-1:000000000000:sensor_error \
+  --endpoint-url http://localhost:4566
+
+aws lambda create-event-source-mapping --function-name apigw-lambda4  --batch-size 10 \
+  --event-source-arn arn:aws:sqs:us-east-1:000000000000:Bins_Salerno \
+  --endpoint-url http://localhost:4566
 
 output=$(aws apigateway create-rest-api --name 'API Gateway Lambda integration' --endpoint-url http://localhost:4566 )
 
@@ -72,6 +105,34 @@ aws apigateway put-integration \
   --type AWS_PROXY \
   --integration-http-method POST \
   --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:apigw-lambda2/invocations \
+  --passthrough-behavior WHEN_NO_MATCH \
+  --endpoint-url http://localhost:4566
+
+output=$(aws apigateway create-resource \
+  --rest-api-id $REST_API_ID \
+  --parent-id $PARENT_ID \
+  --path-part error_message\
+  --endpoint-url http://localhost:4566 \
+  )
+
+RESOURCE_ID2=$(echo "$output" | jq -r '.id')
+echo 'RESOURCE_ID:'$RESOURCE_ID2
+
+aws apigateway put-method \
+  --rest-api-id $REST_API_ID \
+  --resource-id $RESOURCE_ID2 \
+  --http-method GET \
+  --request-parameters "method.request.path.somethingId=true" \
+  --authorization-type "NONE" \
+  --endpoint-url http://localhost:4566 
+
+aws apigateway put-integration \
+  --rest-api-id $REST_API_ID \
+  --resource-id $RESOURCE_ID2 \
+  --http-method GET \
+  --type AWS_PROXY \
+  --integration-http-method POST \
+  --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:apigw-lambda3/invocations \
   --passthrough-behavior WHEN_NO_MATCH \
   --endpoint-url http://localhost:4566
 
