@@ -13,3 +13,15 @@ services:
     volumes:
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
+  valhalla:
+    image: ghcr.io/gis-ops/docker-valhalla/valhalla:latest
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./custom_files/:/custom_files
+  ngnix:
+    image: nginx
+    ports:
+     - "80:80"
+    volumes:
+      - ./src/web_app:/usr/share/nginx/html
