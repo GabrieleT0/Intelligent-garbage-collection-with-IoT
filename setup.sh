@@ -1,6 +1,8 @@
-#Creazione della queue SQS
+#mkdir custom_files
+#wget -O custom_files/italy-sud-latest.osm.pbf https://download.geofabrik.de/europe/italy/sud-latest.osm.pbf
+#Create SQS
 aws sqs create-queue --queue-name Bins_Salerno --endpoint-url=http://localhost:4566
-#Creazione topic SNS
+#Create SNS
 output=$(aws sns create-topic --name sensor_error --endpoint-url=http://localhost:4566)
 TOPIC_ARN=$(echo "$output" | jq -r '.TopicArn')
 echo 'TOPIC_ARN:'$TOPIC_ARN
