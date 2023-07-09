@@ -1,6 +1,6 @@
 //Call the RESTApi to fetch the last measurements
 async function getIoTData(){
-    const response = await fetch("http://localhost:4566/restapis/1ohiendnun/test/_user_request_/test")
+    const response = await fetch("http://localhost:4566/restapis/okpl7pcwdd/test/_user_request_/test")
     const jsonData = await response.json();
 
     return jsonData
@@ -91,7 +91,8 @@ function calculateRoute(map){
         for(var i = 0; i < jsonData.length; i++){
             lat = jsonData[i].latitude
             long = jsonData[i].longitude
-            bins_position.push({'lat':lat, "lon":long})
+            if(jsonData[i].trash_level != 'EMPTY')
+                bins_position.push({'lat':lat, "lon":long})
         }
         locations = {"locations":bins_position,"costing":"auto","directions_options":{"units":"miles"}}
         getOptimizedRoute(locations).then(route => {
