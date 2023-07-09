@@ -162,4 +162,4 @@ cython_debug/
 volume/
 snsread.py
 src/*.zip
-custom_file/
+custom_files/
