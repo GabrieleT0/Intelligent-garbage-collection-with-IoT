@@ -1,6 +1,6 @@
 //Call the RESTApi to fetch the last measurements
 async function getIoTData(){
-    const response = await fetch("http://localhost:4566/restapis/2nw5nxfrqu/test/_user_request_/test")
+    const response = await fetch("http://localhost:4566/restapis/1ohiendnun/test/_user_request_/test")
     const jsonData = await response.json();
 
     return jsonData
@@ -13,11 +13,20 @@ async function getAddress(lat,lon){
     return jsonData
 }
 
+async function getOptimizedRoute(locations){
+    locations = JSON.stringify(locations)
+    const response = await fetch(`http://localhost:8002/optimized_route?json=${locations}`)
+    const jsonData = await response.json();
+
+    return jsonData
+}
+
 function drawRoute(waypoints){
     //Waypoints is an array of elements like this: L.latLng(lat, long)
     L.Routing.control({
         waypoints: waypoints,
-        routeWhileDragging: true
+        routeWhileDragging: true,
+        createMarker: function() {return null;} 
     }).addTo(map);
 }
 
@@ -68,5 +77,56 @@ function createMap(){
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
+
+    return map
 }
 
+function calculateRoute(map){
+    getIoTData().then(jsonData => {
+        jsonData;
+        //Sort data based on the trash level (TO BE EMPTIED firts)
+        jsonData.sort(compareTrashLevel);
+        bins_position = []
+        //Construct an array with only lat e long of every bins
+        for(var i = 0; i < jsonData.length; i++){
+            lat = jsonData[i].latitude
+            long = jsonData[i].longitude
+            bins_position.push({'lat':lat, "lon":long})
+        }
+        locations = {"locations":bins_position,"costing":"auto","directions_options":{"units":"miles"}}
+        getOptimizedRoute(locations).then(route => {
+            route;
+            best_route = route.trip.locations;
+            waypoints = []
+            for(var i = 0; i< best_route.length; i++){
+                waypoints.push(L.latLng(best_route[i].lat, best_route[i].lon))
+            }
+            drawRoute(waypoints)
+        })
+        
+    });
+
+    /* In this way we can get the marker directly from the map
+    map.eachLayer(function (layer) { 
+        if(layer._latlng)
+            consoled.log(layer._latlng)
+    });
+    */
+}
+
+// Funzione di confronto per l'ordinamento in base a trash_level
+function compareTrashLevel(a, b) {
+  const levels = ['TO BE EMPTIED', 'HIGH', 'MEDIUM', 'LOW', 'EMPTY'];
+
+  const levelA = levels.indexOf(a.trash_level);
+  const levelB = levels.indexOf(b.trash_level);
+
+  if (levelA < levelB) {
+    return -1;
+  }
+  if (levelA > levelB) {
+    return 1;
+  }
+  return 0;
+
+}
