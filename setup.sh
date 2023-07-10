@@ -12,6 +12,9 @@ aws sns set-topic-attributes --topic-arn $TOPIC_ARN --attribute-name sensors_err
 #Example of a topic HTTP endpoint subscription
 aws sns subscribe --topic-arn $TOPIC_ARN --protocol http --notification-endpoint http://host.docker.internal:5000 --endpoint-url=http://localhost:4566
 
+#Verify the email to enable the ses to send email with the address
+aws ses verify-email-identity --email-address sensor.error@iotgarbagecollection.com --endpoint-url http://localhost:4566
+
 cd src/
 python create_table.py
 sh deploy_APIG_lambda.sh

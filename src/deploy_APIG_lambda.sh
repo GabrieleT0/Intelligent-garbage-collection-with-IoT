@@ -26,6 +26,7 @@ aws lambda create-function \
     --memory-size 128 \
     --zip-file fileb://function3.zip \
     --role arn:aws:iam::111111111111:role/apigw \
+    --timeout 600 \
     --endpoint-url http://localhost:4566 >/dev/null
 
 zip function4.zip process_data.py
@@ -42,10 +43,6 @@ aws lambda create-function \
 aws sns subscribe --protocol lambda \
   --topic-arn arn:aws:sns:us-east-1:000000000000:sensor_error \
   --notification-endpoint arn:aws:lambda:us-east-1:000000000000:function:apigw-lambda3 \
-  --endpoint-url http://localhost:4566
-
-aws sns publish --message "Hello World" --subject Test \
-  --topic-arn arn:aws:sns:us-east-1:000000000000:sensor_error \
   --endpoint-url http://localhost:4566
 
 aws lambda create-event-source-mapping --function-name apigw-lambda4  --batch-size 10 \

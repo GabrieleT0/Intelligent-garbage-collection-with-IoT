@@ -19,16 +19,16 @@ def test():
 
     for device in iot_devices:
         measure_date = str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        lat = device['latitude']
+        long = device['longitude']
         if random.random() < FAILURE_RATE:
             device_id = device['device_id']
-            error_message = '{"device_id": "%d","error_date": "%s"}' % (device_id,measure_date)
+            error_message = '{"device_id": "%d","error_date": "%s","latitude": "%s","longitude": "%s"}' % (device_id,measure_date,lat,long)
             sns_client.publish(TopicArn=topicArn,Message=error_message,Subject='ERROR')
             print('IoT device error')
         else:
             kg = round(random.uniform(0.0,50.50),2)
             device_id = device['device_id']
-            lat = device['latitude']
-            long = device['longitude']
             msg_body = '{"device_id": "%d","measure_date": "%s","latitude": "%s","longitude": "%s","kilograms": "%s"}' % (device_id,measure_date,lat,long,kg)
             queue.send_message(MessageBody=msg_body)
 
