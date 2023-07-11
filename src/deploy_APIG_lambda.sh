@@ -40,6 +40,17 @@ aws lambda create-function \
     --timeout 600 \
     --endpoint-url http://localhost:4566 >/dev/null
 
+zip function5.zip email_sended.py
+aws lambda create-function \
+    --function-name apigw-lambda5 \
+    --runtime python3.8 \
+    --handler email_sended.lambda_handler\
+    --memory-size 128 \
+    --zip-file fileb://function5.zip \
+    --role arn:aws:iam::111111111111:role/apigw \
+    --timeout 600 \
+    --endpoint-url http://localhost:4566 >/dev/null
+
 aws sns subscribe --protocol lambda \
   --topic-arn arn:aws:sns:us-east-1:000000000000:sensor_error \
   --notification-endpoint arn:aws:lambda:us-east-1:000000000000:function:apigw-lambda3 \
@@ -129,7 +140,7 @@ aws apigateway put-integration \
   --http-method GET \
   --type AWS_PROXY \
   --integration-http-method POST \
-  --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:apigw-lambda3/invocations \
+  --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:apigw-lambda5/invocations \
   --passthrough-behavior WHEN_NO_MATCH \
   --endpoint-url http://localhost:4566
 

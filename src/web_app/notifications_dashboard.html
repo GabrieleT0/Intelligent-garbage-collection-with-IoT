@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Notifications Panel</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+        <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" href="css/notifications_dashboard.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.css" />
+        <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    </head>
+    <body>
+        <nav class="navbar is-transparent">
+            <div class="navbar-brand">
+              <a class="navbar-item" href="index.html">
+                <img src="img/garbage.png" alt="IoT Garbage Collection" width="30" height="100"> <p class="has-text-weight-bold mx-2">IoT Garbage Collection</p>
+              </a>
+              <div class="navbar-burger" data-target="navbarExampleTransparentExample">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          
+            <div id="navbarExampleTransparentExample" class="navbar-menu">
+              <div class="navbar-start">
+                <a class="navbar-item is-size-6 has-text-weight-medium" href="index.html">
+                  Home
+                </a>
+                <a class="navbar-item is-size-6 has-text-weight-medium" href="route.html">
+                    Calculate the route for the collection
+                </a>
+                <a class="navbar-item is-size-6 has-text-weight-medium" href="notifications_dashboard.html">
+                    Notifications panel
+                </a>
+              </div>
+          
+              <div class="navbar-end">
+                <div class="navbar-item">
+                  <div class="field is-grouped">
+                    <p class="control">
+                      <a class="button is-dark" data-social-network="Twitter" data-social-action="tweet" data-social-target="https://bulma.io" target="_blank" href="https://github.com/GabrieleT0/Intelligent-garbage-collection-with-IoT">    
+                        <img src="img/github.png" alt="IoT Garbage Collection" width="30" height="50" class="mr-3">
+                        <span>
+                          See on GitHub
+                        </span>
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </nav>
+        <script src="js/notifications_dashboard.js"></script>
+        <div class="tile is-parent">
+            <article class="tile is-child notification has-background-warning">
+              <div class="content">
+                <table id="email-table" class="table is-hoverable">
+                    <thead>
+                        <tr class="has-background-info">
+                            <th class="has-text-weight-bold" >ID IoT device</th>
+                            <th class="has-text-weight-bold">Location</th>
+                            <th class="has-text-weight-bold">Date</th>
+                            <th class="has-text-weight-bold">Notification sent to:</th>
+                            <th class="has-text-weight-bold">View the position on the map</th>
+                        </tr>
+                    </thead>
+                </table>
+              </div>
+            </article>
+        </div>
+        <footer class="footer">
+            <div class="content has-text-centered">
+              <p>
+                <strong>IoT Garbage Collection</strong>, project realized for the Serverless Computing for IoT course. The source code is licensed
+                <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
+              </p>
+            </div>
+        </footer>
+    </body>
