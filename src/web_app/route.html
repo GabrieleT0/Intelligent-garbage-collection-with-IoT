@@ -9,6 +9,7 @@
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
         crossorigin=""/>
         <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     </head>
     <body>
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="crossorigin=""></script>
@@ -17,28 +18,113 @@
         <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
         <script src="js/route.js"></script>
         <script src="js/index.js"></script>
-        <div id="map"></div>
+        <nav class="navbar is-transparent">
+            <div class="navbar-brand">
+              <a class="navbar-item" href="index.html">
+                <img src="img/garbage.png" alt="IoT Garbage Collection" width="30" height="100"> <p class="has-text-weight-bold mx-2">IoT Garbage Collection</p>
+              </a>
+              <div class="navbar-burger" data-target="navbarExampleTransparentExample">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          
+            <div id="navbarExampleTransparentExample" class="navbar-menu">
+              <div class="navbar-start">
+                <a class="navbar-item is-size-6 has-text-weight-medium" href="index.html">
+                  Home
+                </a>
+                <a class="navbar-item is-size-6 has-text-weight-medium" href="route.html">
+                    Calculate the route for the collection
+                </a>
+                <a class="navbar-item is-size-6 has-text-weight-medium" href="notifications_dashboard.html">
+                    Notifications panel
+                </a>
+              </div>
+          
+              <div class="navbar-end">
+                <div class="navbar-item">
+                  <div class="field is-grouped">
+                    <button class="button mr-4 is-warning is-focused is-rounded">
+                        <span class="icon">
+                            <img src="img/adjust.png" alt="Personalize">
+                        </span>
+                        <span>Personalize route</span>
+                    </button>
+                    <p class="control">
+                      <a class="button is-dark" data-social-network="Twitter" data-social-action="tweet" data-social-target="https://bulma.io" target="_blank" href="https://github.com/GabrieleT0/Intelligent-garbage-collection-with-IoT">    
+                        <img src="img/github.png" alt="IoT Garbage Collection" width="30" height="50" class="mr-3">
+                        <span>
+                          See on GitHub
+                        </span>
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </nav>
+        <div class="tile is-parent">
+        <article class="tile is-child notification has-background-info">
+            <div class="content">
+            <div id="map"></div>
+            </div>
+        </article>
+        </div>
         <script>
          map = createMap2();
          calculateRoute(map);
         </script>
-        <p>Customize route calculation</p>
-        <form id="personal_route">
-            <label for="source">Source:</label>
-            <select id="source-selected"></select>
-            
-            <br>
-
-            <label for="destination">Destination:</label>
-            <select id="destination-selected"></select>
-
-            <input type="submit" value="Submit">
-        </form>
+        
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+                <label class="label">Customize route calculation</label>
+            </div>
+                <form id="personal_route">
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="select is-rounded">
+                                <select id="source-selected">
+                                    <option>Select source</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="select is-rounded">
+                                <select id="destination-selected">
+                                    <option>Select destination</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field is-horizontal">
+                        <div class="field-label">
+                          <!-- Left empty for spacing -->
+                        </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="button is-primary" type="submit" value="Submit">
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+                </form>
+                </form>
         <script>
         populate_dropdown();
         route_from_form();        
         </script>
-        
 
+        <footer class="footer">
+            <div class="content has-text-centered">
+                <p>
+                <strong>IoT Garbage Collection</strong>, project realized for Serverless Computing for IoT course. The source code is licensed
+                <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
+                </p>
+            </div>
+        </footer>
     </body>
 </html>
