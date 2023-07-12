@@ -195,8 +195,14 @@ function route_from_form(){
         event.preventDefault(); 
         var source_selected = document.getElementById("source-selected")
         var destination_selected = document.getElementById("destination-selected")
-        value_source_selected = JSON.parse(source_selected.value)
-        value_destination_selected = JSON.parse(destination_selected.value)
+        try{
+            value_source_selected = JSON.parse(source_selected.value)
+            value_destination_selected = JSON.parse(destination_selected.value)
+        } catch (error){
+            alert("Source or destination not valid!")
+            return
+        }
+
         bins_position = []
         bins_position.push(value_source_selected)
         getIoTData().then(jsonData => {
@@ -209,9 +215,6 @@ function route_from_form(){
                 }
             }
             bins_position.push(value_destination_selected) 
-            console.log(bins_position)
-            console.log('Source: '+ JSON.stringify(value_source_selected))       
-            console.log('Destination: '+ JSON.stringify(value_destination_selected))
             locations = {"locations":bins_position,"costing":"auto","directions_options":{"units":"miles"}}
             getOptimizedRoute(locations).then(route => {
                 route;

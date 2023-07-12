@@ -33,7 +33,7 @@ function load_notifications_panel(){
                     else
                         id = ''
                     
-                    link = `https://maps.google.com/?q=${lat},${lon}`
+                    link = `errors_map.html?lat=${lat}&lon=${lon}&id=${id}`
                     row = {
                         'ID IoT device' : id,
                         'Location' : lat + ',' + lon,
