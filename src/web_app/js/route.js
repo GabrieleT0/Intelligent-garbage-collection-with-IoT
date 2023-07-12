@@ -226,5 +226,15 @@ function route_from_form(){
                 drawRoute(waypoints,map)
             })
         })
+        hide_form()
     })
+}
+
+function hide_form(){
+    var form = document.getElementById("form-div")
+    if(form.style.display == 'none'){
+        form.style.display = 'block'
+    } else {
+        form.style.display = "none"
+    }
 }

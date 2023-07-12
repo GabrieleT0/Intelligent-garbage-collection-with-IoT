@@ -18,7 +18,7 @@
         <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
         <script src="js/route.js"></script>
         <script src="js/index.js"></script>
-        <nav class="navbar is-transparent">
+        <nav class="navbar is-transparent is-active">
             <div class="navbar-brand">
               <a class="navbar-item" href="index.html">
                 <img src="img/garbage.png" alt="IoT Garbage Collection" width="30" height="100"> <p class="has-text-weight-bold mx-2">IoT Garbage Collection</p>
@@ -46,7 +46,7 @@
               <div class="navbar-end">
                 <div class="navbar-item">
                   <div class="field is-grouped">
-                    <button class="button mr-4 is-warning is-focused is-rounded">
+                    <button class="button mr-4 is-warning is-focused is-rounded" onClick="hide_form()">
                         <span class="icon">
                             <img src="img/adjust.png" alt="Personalize">
                         </span>
@@ -64,55 +64,58 @@
                 </div>
               </div>
             </div>
-          </nav>
-        <div class="tile is-parent">
-        <article class="tile is-child notification has-background-info">
-            <div class="content">
-            <div id="map"></div>
+        </nav>
+
+          <div id="form-div" class="container is-max-desktop" style="display: none;">
+            <div class="notification is-warning is-focused is-rounded">
+                <p class="is-size-5 has-text-weight-semibold">Customize the source and the destination for the route.</p>
+                <div class="field is-horizontal">
+                        <form id="personal_route">
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="select is-rounded">
+                                        <select id="source-selected">
+                                            <option>Select source</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="select is-rounded">
+                                        <select id="destination-selected">
+                                            <option>Select destination</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label">
+                                  <!-- Left empty for spacing -->
+                                </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <input class="button is-primary mt-3" type="submit" value="Submit">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-        </article>
+        </div>
+        <div class="tile is-parent">
+          <article class="tile is-child notification has-background-info">
+              <div class="content">
+              <div id="map"></div>
+              </div>
+          </article>
         </div>
         <script>
          map = createMap2();
          calculateRoute(map);
         </script>
-        
-        <div class="field is-horizontal">
-            <div class="field-label is-normal">
-                <label class="label">Customize route calculation</label>
-            </div>
-                <form id="personal_route">
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="select is-rounded">
-                                <select id="source-selected">
-                                    <option>Select source</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <div class="select is-rounded">
-                                <select id="destination-selected">
-                                    <option>Select destination</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field is-horizontal">
-                        <div class="field-label">
-                          <!-- Left empty for spacing -->
-                        </div>
-                    <div class="field-body">
-                        <div class="field">
-                            <div class="control">
-                                <input class="button is-primary" type="submit" value="Submit">
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                    </div>
-                </form>
-                </form>
+    
         <script>
         populate_dropdown();
         route_from_form();        
