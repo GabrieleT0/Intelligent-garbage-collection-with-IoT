@@ -65,6 +65,8 @@ output=$(aws apigateway create-rest-api --name 'API Gateway Lambda integration' 
 REST_API_ID=$(echo "$output" | jq -r '.id')
 echo 'REST_API_ID:'$REST_API_ID
 
+jq -n --arg value "$REST_API_ID" '{"REST_API_ID": $value}' > web_app/config.json
+
 output=$(aws apigateway get-resources --rest-api-id $REST_API_ID --endpoint-url http://localhost:4566)
 
 PARENT_ID=$(echo "$output" | jq -r '.items[0].id')

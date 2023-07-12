@@ -1,9 +1,14 @@
 //Call the RESTApi to fetch the last measurements
 async function getIoTData(){
-    const response = await fetch("http://localhost:4566/restapis/ab30x25pef/test/_user_request_/test")
-    const jsonData = await response.json();
+    return new Promise((resolve) =>{
+        fetch("./config.json").then(response => response.json())
+        .then(async data => {
+            const response = await fetch(`http://localhost:4566/restapis/${data.REST_API_ID}/test/_user_request_/test`)
+            const jsonData = await response.json();
 
-    return jsonData
+            resolve(jsonData)
+            })
+    })
 }
 
 async function getAddress(lat,lon){
