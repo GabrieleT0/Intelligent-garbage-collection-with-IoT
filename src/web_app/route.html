@@ -65,7 +65,10 @@
               </div>
             </div>
         </nav>
-
+        <div class="notification is-info is-light">
+          <button class="delete"></button>
+          The default route excludes <strong>empty</strong> and <strong>low</strong> trash bins.
+        </div>
           <div id="form-div" class="container is-max-desktop" style="display: none;">
             <div class="notification is-warning is-focused is-rounded">
                 <p class="is-size-5 has-text-weight-semibold">Customize the source and the destination for the route.</p>
@@ -87,6 +90,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <label class="checkbox mt-2 ml-2">
+                              <input type="checkbox" id="empty-bins">
+                              Exclude EMPTY bins
+                            </label>
+                            <label class="checkbox ml-3">
+                              <input type="checkbox" id="low-bins">
+                              Exclude bins with LOW level
+                            </label>
                             <div class="field is-horizontal">
                                 <div class="field-label">
                                   <!-- Left empty for spacing -->
@@ -98,6 +109,10 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div id="error-route" class="notification is-danger is-light" style="display: none;">
+                          <button class="delete"></button>
+                          The default route excludes <strong>empty</strong> and <strong>low</strong> trash bins.
                         </div>
                         </form>
                     </div>
@@ -129,5 +144,17 @@
                 </p>
             </div>
         </footer>
+        <div id="modal-js-example" class="modal">
+          <div class="modal-background"></div>
+        
+          <div class="modal-content">
+            <div class="box">
+              <p>Modal JS example</p>
+              <!-- Your content -->
+            </div>
+          </div>
+        
+          <button class="modal-close is-large" aria-label="close"></button>
+        </div>
     </body>
 </html>

@@ -1,7 +1,7 @@
 load_notifications_panel()
 setInterval(load_notifications_panel,60000)
 
-function load_notifications_panel(){
+function load_notifications_panel(){  
     fetch("./config.json").then(response => response.json())
     .then(async data => {
 

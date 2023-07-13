@@ -1,3 +1,13 @@
+document.addEventListener('DOMContentLoaded', () => {
+    (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+      const $notification = $delete.parentNode;
+  
+      $delete.addEventListener('click', () => {
+        $notification.parentNode.removeChild($notification);
+      });
+    });
+  });
+
 async function getOptimizedRoute(locations){
     locations = JSON.stringify(locations)
     const response = await fetch(`http://localhost:8002/optimized_route?json=${locations}`)
@@ -134,7 +144,7 @@ function change_starting_point(e){
         for(var i = 0; i<jsonData.length; i++){
             lat = jsonData[i].latitude
             long = jsonData[i].longitude
-            if(lat != e.latlng.lat && jsonData[i].trash_level != 'EMPTY')
+            if(lat != e.latlng.lat && jsonData[i].trash_level != 'EMPTY' && jsonData[i].trash_level != 'LOW')
                 bins_position.push({'lat':lat, "lon":long})
         }
         locations = {"locations":bins_position,"costing":"auto","directions_options":{"units":"miles"}}
@@ -200,14 +210,20 @@ function route_from_form(){
         event.preventDefault(); 
         var source_selected = document.getElementById("source-selected")
         var destination_selected = document.getElementById("destination-selected")
+        var check_empty = document.getElementById('empty-bins').checked
+        var check_low = document.getElementById('low-bins').checked
         try{
             value_source_selected = JSON.parse(source_selected.value)
             value_destination_selected = JSON.parse(destination_selected.value)
         } catch (error){
-            alert("Source or destination not valid!")
+            error_message = document.getElementById('error-route')
+            if(error_message.style.display == 'none'){
+                error_message.style.display = 'block'
+            }
             return
         }
-
+        error_message = document.getElementById('error-route')
+        error_message.style.display = 'none'
         bins_position = []
         bins_position.push(value_source_selected)
         getIoTData().then(jsonData => {
@@ -215,11 +231,16 @@ function route_from_form(){
             for(var i = 0; i<jsonData.length; i++){
                 lat = jsonData[i].latitude
                 long = jsonData[i].longitude
-                if(lat != value_destination_selected.lat && lat != value_source_selected.lat && jsonData[i].trash_level != 'EMPTY'){
+                if(lat != value_destination_selected.lat && lat != value_source_selected.lat){
+                    if(jsonData[i].trash_level == 'EMPTY' && check_empty == true)
+                        continue
+                    if (jsonData[i].trash_level == 'LOW' && check_low == true)
+                        continue
                     bins_position.push({'lat':lat, "lon":long})
                 }
             }
             bins_position.push(value_destination_selected) 
+            console.log(bins_position)
             locations = {"locations":bins_position,"costing":"auto","directions_options":{"units":"miles"}}
             getOptimizedRoute(locations).then(route => {
                 route;
