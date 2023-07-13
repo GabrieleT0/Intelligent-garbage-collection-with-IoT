@@ -78,7 +78,8 @@ function createMap(){
             var binIcon = new BinIcon({iconUrl: urlIcon})
             var marker = L.marker([lat, long],{icon: binIcon}).addTo(map);
             //Here we can personalize the popup on the marker when it is clicked
-            marker.bindPopup(message + `<br><p>Distance of the garbage from the top: <b>${jsonData[i]['distance(cm)']} cm </b>`);
+            marker.bindPopup(message + `<br><p>Distance of the garbage from the top: <b>${jsonData[i]['distance(cm)']} cm </b>
+                                        <br><p>Measure date: <b>${jsonData[i]['measure_date']} UTC<b>`);
         }
     })
     //Lastly, render the map
