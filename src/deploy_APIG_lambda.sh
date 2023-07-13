@@ -58,7 +58,7 @@ aws sns subscribe --protocol lambda \
 
 aws lambda create-event-source-mapping --function-name apigw-lambda4  --batch-size 10 \
   --event-source-arn arn:aws:sqs:us-east-1:000000000000:Bins_Salerno \
-  --endpoint-url http://localhost:4566
+  --endpoint-url http://localhost:4566 >/dev/null
 
 output=$(aws apigateway create-rest-api --name 'API Gateway Lambda integration' --endpoint-url http://localhost:4566 )
 

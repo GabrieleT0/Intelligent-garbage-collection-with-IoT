@@ -2,18 +2,23 @@ import boto3
 import datetime
 import random
 import json
+import os
 
 FAILURE_RATE = 0.08
 
-#def lambda_handler(event,context):
-def test():
-    sqs = boto3.resource('sqs', endpoint_url='http://localhost:4566')
-    sns_client = boto3.client('sns',endpoint_url='http://localhost:4566')
+def lambda_handler(event,context):
+#def test():
+    endpoint_url = f'http://{os.environ.get("LOCALSTACK_HOSTNAME")}:{os.environ.get("EDGE_PORT")}'
+    sqs = boto3.resource('sqs', endpoint_url=endpoint_url)
+    sns_client = boto3.client('sns',endpoint_url=endpoint_url)
     topicArn = 'arn:aws:sns:us-east-1:000000000000:sensor_error'
     
-    #load info of our simulated IoT device from a JSON file
-    with open('IoTDevices_info.json','r') as f:
-        iot_devices = json.load(f)
+    #load info of our simulated IoT device from a JSON file stored in a S3 Bucket
+    s3 = boto3.resource('s3', endpoint_url=endpoint_url)
+    bucket = s3.Bucket('iot-devices-metadata')
+    object = bucket.Object('iot_devices')
+    file_content = object.get()['Body'].read().decode('utf-8')
+    iot_devices = json.loads(file_content)
 
     queue = sqs.get_queue_by_name(QueueName='Bins_Salerno')
 
@@ -31,5 +36,3 @@ def test():
             device_id = device['device_id']
             msg_body = '{"device_id": "%d","measure_date": "%s","latitude": "%s","longitude": "%s","distance(cm)": "%s"}' % (device_id,measure_date,lat,long,distance)
             queue.send_message(MessageBody=msg_body)
-
-test()

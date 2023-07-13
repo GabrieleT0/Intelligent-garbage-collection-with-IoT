@@ -163,3 +163,5 @@ volume/
 snsread.py
 src/*.zip
 custom_files/
+src/web_app/config.json
+*.zip
