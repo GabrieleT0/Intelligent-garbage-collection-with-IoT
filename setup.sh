@@ -31,7 +31,7 @@ aws lambda create-function \
 
 aws events put-rule \
     --name my-scheduled-rule \
-    --schedule-expression 'rate(30 minutes)'\
+    --schedule-expression 'rate(10 minutes)'\
     --endpoint-url http://localhost:4566 >/dev/null
 
 aws lambda add-permission \
@@ -47,5 +47,3 @@ aws events put-targets --rule my-scheduled-rule --targets file://targets.json --
 cd src/
 python create_table.py
 sh deploy_APIG_lambda.sh
-cd ..
-python IoTDevices.py
