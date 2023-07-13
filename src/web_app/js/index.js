@@ -56,25 +56,29 @@ function createMap(){
             long = jsonData[i].longitude
             if(jsonData[i].trash_level == 'EMPTY'){
                 urlIcon = 'img/empty-bin.png'
-                message = `<b>Sono vuoto!</b>`
+                message = `<b>I'm empty!</b>`
             }
             else if(jsonData[i].trash_level == 'MEDIUM'){
                 urlIcon = 'img/medium-bin.png'
-                message = `<b>Sono pieno a metà!`
+                message = `<b>I'm half full</b>`
             }
             else if(jsonData[i].trash_level == 'HIGH'){
                 urlIcon = 'img/almst-sull-bin.png'
-                message = `<b>Sono quasi pieno!`
+                message = `<b>I'm almost full!</b>`
+            }
+            else if(jsonData[i].trash_level == 'LOW'){
+                urlIcon = 'img/low.png'
+                message = `<b>Low trash level!</b>`
             }
             else if(jsonData[i].trash_level == 'TO BE EMPTIED'){
                 urlIcon = 'img/full-bin.png'
-                message = `<b>Sono pieno, vieni a prendermi!`
+                message = `<b>Sono pieno, vieni a prendermi!</b>`
             }
             //waypoints.push(L.latLng(lat, long))
             var binIcon = new BinIcon({iconUrl: urlIcon})
             var marker = L.marker([lat, long],{icon: binIcon}).addTo(map);
             //Here we can personalize the popup on the marker when it is clicked
-            marker.bindPopup(message);
+            marker.bindPopup(message + `<br><p>Distance of the garbage from the top: <b>${jsonData[i]['distance(cm)']} cm </b>`);
         }
     })
     //Lastly, render the map
@@ -86,39 +90,6 @@ function createMap(){
     return map
 }
 
-function calculateRoute(map){
-    getIoTData().then(jsonData => {
-        jsonData;
-        //Sort data based on the trash level (TO BE EMPTIED firts)
-        jsonData.sort(compareTrashLevel);
-        bins_position = []
-        //Construct an array with only lat e long of every bins
-        for(var i = 0; i < jsonData.length; i++){
-            lat = jsonData[i].latitude
-            long = jsonData[i].longitude
-            if(jsonData[i].trash_level != 'EMPTY')
-                bins_position.push({'lat':lat, "lon":long})
-        }
-        locations = {"locations":bins_position,"costing":"auto","directions_options":{"units":"miles"}}
-        getOptimizedRoute(locations).then(route => {
-            route;
-            best_route = route.trip.locations;
-            waypoints = []
-            for(var i = 0; i< best_route.length; i++){
-                waypoints.push(L.latLng(best_route[i].lat, best_route[i].lon))
-            }
-            drawRoute(waypoints)
-        })
-        
-    });
-
-    /* In this way we can get the marker directly from the map
-    map.eachLayer(function (layer) { 
-        if(layer._latlng)
-            consoled.log(layer._latlng)
-    });
-    */
-}
 
 // Funzione di confronto per l'ordinamento in base a trash_level
 function compareTrashLevel(a, b) {

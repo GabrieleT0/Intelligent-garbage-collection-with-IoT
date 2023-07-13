@@ -25,9 +25,10 @@ function calculateRoute(map){
         for(var i = 0; i < jsonData.length; i++){
             lat = jsonData[i].latitude
             long = jsonData[i].longitude
-            if(jsonData[i].trash_level != 'EMPTY')
+            if(jsonData[i].trash_level != 'EMPTY' && jsonData[i].trash_level != 'LOW')
                 bins_position.push({'lat':lat, "lon":long})
         }
+        console.log(bins_position)
         locations = {"locations":bins_position,"costing":"auto","directions_options":{"units":"miles"}}
         getOptimizedRoute(locations).then(route => {
             route;
@@ -99,6 +100,10 @@ function createMap2(){
             }
             else if(jsonData[i].trash_level == 'TO BE EMPTIED'){
                 urlIcon = 'img/full-bin.png'
+                message = `<b>Sono pieno, vieni a prendermi!`
+            }
+            else if(jsonData[i].trash_level == 'LOW'){
+                urlIcon = 'img/low.png'
                 message = `<b>Sono pieno, vieni a prendermi!`
             }
             //waypoints.push(L.latLng(lat, long))
