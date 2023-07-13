@@ -3,10 +3,11 @@ import datetime
 import json
 import os
 
-EMPTY = 2.0
-LOW = 10.0
-MEDIUM = 25.00
-HIGH = 45.00
+EMPTY = 110
+LOW = 90
+MEDIUM = 60
+HIGH = 30
+VERY_HIGH = 15
 
 def lambda_handler(event, contex):
     endpoint_url = f'http://{os.environ.get("LOCALSTACK_HOSTNAME")}:{os.environ.get("EDGE_PORT")}'
@@ -20,14 +21,14 @@ def lambda_handler(event, contex):
         message = record['body']
 
         content = json.loads(message)
-        kg = float(content['kilograms'])
-        if(kg <= EMPTY):
+        distance = float(content['distance(cm)'])
+        if(distance >= EMPTY):
             level = 'EMPTY'
-        if(kg <= LOW):
+        elif(distance >= LOW):
             level = 'LOW'
-        elif(kg <= MEDIUM):
+        elif(distance >= MEDIUM):
             level = 'MEDIUM'
-        elif(kg <= HIGH):
+        elif(distance >= HIGH):
             level = 'HIGH'
         else:
             level = 'TO BE EMPTIED'
@@ -37,6 +38,7 @@ def lambda_handler(event, contex):
             'latitude': content['latitude'],
             'longitude': content['longitude'],
             'trash_level': level,
+            'distance(cm)': str(distance),
             'measure_date': content['measure_date']
         }
 

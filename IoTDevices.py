@@ -27,9 +27,9 @@ def test():
             sns_client.publish(TopicArn=topicArn,Message=error_message,Subject='ERROR')
             print('IoT device error')
         else:
-            kg = round(random.uniform(0.0,50.50),2)
+            distance = round(random.uniform(0.0,120.00),2)
             device_id = device['device_id']
-            msg_body = '{"device_id": "%d","measure_date": "%s","latitude": "%s","longitude": "%s","kilograms": "%s"}' % (device_id,measure_date,lat,long,kg)
+            msg_body = '{"device_id": "%d","measure_date": "%s","latitude": "%s","longitude": "%s","distance(cm)": "%s"}' % (device_id,measure_date,lat,long,distance)
             queue.send_message(MessageBody=msg_body)
 
 test()
