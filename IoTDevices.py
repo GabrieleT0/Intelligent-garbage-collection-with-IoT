@@ -7,7 +7,6 @@ import os
 FAILURE_RATE = 0.08
 
 def lambda_handler(event,context):
-#def test():
     endpoint_url = f'http://{os.environ.get("LOCALSTACK_HOSTNAME")}:{os.environ.get("EDGE_PORT")}'
     sqs = boto3.resource('sqs', endpoint_url=endpoint_url)
     sns_client = boto3.client('sns',endpoint_url=endpoint_url)
