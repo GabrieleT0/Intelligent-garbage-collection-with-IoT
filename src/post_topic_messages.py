@@ -6,7 +6,7 @@ import json
 def lambda_handler(event, context):
     endpoint_url = f'http://{os.environ.get("LOCALSTACK_HOSTNAME")}:{os.environ.get("EDGE_PORT")}'
 
-    # Create a new SES resource and specify a region.
+    # Connect to the SES service
     client = boto3.client('ses',endpoint_url=endpoint_url)
     
     sender = "sensor.error@iotgarbagecollection.com"
