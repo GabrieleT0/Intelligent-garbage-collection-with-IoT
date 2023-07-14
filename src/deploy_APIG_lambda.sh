@@ -54,7 +54,7 @@ aws lambda create-function \
 aws sns subscribe --protocol lambda \
   --topic-arn arn:aws:sns:us-east-1:000000000000:sensor_error \
   --notification-endpoint arn:aws:lambda:us-east-1:000000000000:function:apigw-lambda3 \
-  --endpoint-url http://localhost:4566
+  --endpoint-url http://localhost:4566 >/dev/null
 
 aws lambda create-event-source-mapping --function-name apigw-lambda4  --batch-size 10 \
   --event-source-arn arn:aws:sqs:us-east-1:000000000000:Bins_Salerno \
@@ -106,7 +106,7 @@ aws apigateway put-integration \
   --integration-http-method POST \
   --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:apigw-lambda/invocations \
   --passthrough-behavior WHEN_NO_MATCH \
-  --endpoint-url http://localhost:4566
+  --endpoint-url http://localhost:4566 
 
 aws apigateway put-integration \
   --rest-api-id $REST_API_ID \
@@ -116,13 +116,13 @@ aws apigateway put-integration \
   --integration-http-method POST \
   --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:apigw-lambda2/invocations \
   --passthrough-behavior WHEN_NO_MATCH \
-  --endpoint-url http://localhost:4566
+  --endpoint-url http://localhost:4566 
 
 output=$(aws apigateway create-resource \
   --rest-api-id $REST_API_ID \
   --parent-id $PARENT_ID \
   --path-part error_message\
-  --endpoint-url http://localhost:4566 \
+  --endpoint-url http://localhost:4566
   )
 
 RESOURCE_ID2=$(echo "$output" | jq -r '.id')
@@ -134,7 +134,7 @@ aws apigateway put-method \
   --http-method GET \
   --request-parameters "method.request.path.somethingId=true" \
   --authorization-type "NONE" \
-  --endpoint-url http://localhost:4566 
+  --endpoint-url http://localhost:4566 >/dev/null
 
 aws apigateway put-integration \
   --rest-api-id $REST_API_ID \
@@ -144,9 +144,9 @@ aws apigateway put-integration \
   --integration-http-method POST \
   --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:apigw-lambda5/invocations \
   --passthrough-behavior WHEN_NO_MATCH \
-  --endpoint-url http://localhost:4566
+  --endpoint-url http://localhost:4566 >/dev/null
 
 aws apigateway create-deployment \
   --rest-api-id $REST_API_ID \
   --stage-name test \
-  --endpoint-url http://localhost:4566
+  --endpoint-url http://localhost:4566 >/dev/null
