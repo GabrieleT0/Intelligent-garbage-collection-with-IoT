@@ -23,5 +23,60 @@
         "device_id": 4,
         "latitude": "40.679801",
         "longitude": "14.770227"
+    },
+    {
+        "device_id": 5,
+        "latitude": "40.674911",
+        "longitude": "14.772083"
+    },
+    {
+        "device_id": 6,
+        "latitude": "40.684423",
+        "longitude": "14.775591"
+    },
+    {
+        "device_id": 7,
+        "latitude": "40.683126",
+        "longitude": "14.772845"
+    },
+    {
+        "device_id": 8,
+        "latitude": "40.678847",
+        "longitude": "14.762062"
+    },
+    {
+        "device_id": 9,
+        "latitude": "40.679801",
+        "longitude": "14.770227"
+    },
+    {
+        "device_id": 10,
+        "latitude": "40.68061844552937",
+        "longitude": "14.75466242888531"
+    },
+    {
+        "device_id": 11,
+        "latitude": "40.67948193640422",
+        "longitude": "14.774062435344007"
+    },
+    {
+        "device_id": 12,
+        "latitude": "40.681703137678866",
+        "longitude": "14.777216713328407"
+    },
+    {
+        "device_id": 13,
+        "latitude": "40.67184014582847",
+        "longitude": "14.778626814516622"
+    },
+    {
+        "device_id": 14,
+        "latitude": "40.68437554937946",
+        "longitude": "14.765376403434761"
+    },
+    {
+        "device_id": 15,
+        "latitude": "40.67965247478782",
+        "longitude": "14.776987656293459"
     }
 ]
