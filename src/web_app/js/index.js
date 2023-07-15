@@ -1,3 +1,9 @@
+
+//Set the map center
+var map = L.map('map').setView([40.68252333266151, 14.770895359322255], 15);
+map = createMap(map)
+setInterval(createMap, 100000, map); 
+
 //Call the RESTApi to fetch the last measurements
 async function getIoTData(){
     return new Promise((resolve) =>{
@@ -35,9 +41,11 @@ function drawRoute(waypoints){
     }).addTo(map);
 }
 
-function createMap(){
-    //Set the map center
-    var map = L.map('map').setView([40.68252333266151, 14.770895359322255], 15);
+function createMap(map){
+    //remove the pin, for refresh it with the new data
+    map.eachLayer(function (layer) { 
+        map.removeLayer(layer)
+    });
     //Load IoT devices cordinates and create a marker on the map for each of them
     getIoTData().then(jsonData => {
         jsonData;
