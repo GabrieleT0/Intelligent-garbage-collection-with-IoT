@@ -1,6 +1,10 @@
 
 //Set the map center
 var map = L.map('map').setView([40.68252333266151, 14.770895359322255], 15);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
 map = createMap(map)
 setInterval(createMap, 100000, map); 
 
@@ -45,7 +49,9 @@ function createMap(map){
     //remove the pin, for refresh it with the new data
     map.eachLayer(function (layer) { 
         map.removeLayer(layer)
+        return
     });
+    
     //Load IoT devices cordinates and create a marker on the map for each of them
     getIoTData().then(jsonData => {
         jsonData;
@@ -82,12 +88,18 @@ function createMap(map){
                 urlIcon = 'img/full-bin.png'
                 message = `<b>Sono pieno, vieni a prendermi!</b>`
             }
+
+            const utcDate = jsonData[i]['measure_date'];
+            const date = new Date(utcDate);
+            date.setHours(date.getHours()+2)
+            converted_date = JSON.stringify(date.toISOString(date.setHours(date.getHours()+2)))
+
             //waypoints.push(L.latLng(lat, long))
             var binIcon = new BinIcon({iconUrl: urlIcon})
             var marker = L.marker([lat, long],{icon: binIcon}).addTo(map);
             //Here we can personalize the popup on the marker when it is clicked
             marker.bindPopup(message + `<br><p>Distance of the garbage from the top: <b>${jsonData[i]['distance(cm)']} cm </b>
-                                        <br><p>Measure date: <b>${jsonData[i]['measure_date']} UTC<b>`);
+                                        <br><p>Measure date: <b>${converted_date}<b>`);
         }
     })
     //Lastly, render the map

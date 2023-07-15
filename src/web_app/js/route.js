@@ -38,7 +38,6 @@ function calculateRoute(map){
             if(jsonData[i].trash_level != 'EMPTY' && jsonData[i].trash_level != 'LOW')
                 bins_position.push({'lat':lat, "lon":long})
         }
-        console.log(bins_position)
         locations = {"locations":bins_position,"costing":"auto","directions_options":{"units":"miles"}}
         getOptimizedRoute(locations).then(route => {
             route;
@@ -134,10 +133,8 @@ function createMap2(){
 
 function change_starting_point(e){
     lat_lng_clicked = e.latlng
-    console.log(lat_lng_clicked)
     bins_position = []
     bins_position.push({'lat':e.latlng.lat, "lon":e.latlng.lng})
-    console.log(bins_position)
     getIoTData().then(jsonData => {
         jsonData;
         jsonData.sort(compareTrashLevel);
@@ -240,7 +237,6 @@ function route_from_form(){
                 }
             }
             bins_position.push(value_destination_selected) 
-            console.log(bins_position)
             locations = {"locations":bins_position,"costing":"auto","directions_options":{"units":"miles"}}
             getOptimizedRoute(locations).then(route => {
                 route;

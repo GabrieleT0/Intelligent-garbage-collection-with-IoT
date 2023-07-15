@@ -19,6 +19,9 @@ function load_notifications_panel(){
                     messages_text = messages[i].Body.text_part
                     addresses = messages[i].Destination.ToAddresses
                     timestamp = messages[i].Timestamp
+                    const date = new Date(timestamp);
+                    date.setHours(date.getHours()+2)
+                    converted_date = JSON.stringify(date.toISOString(date.setHours(date.getHours()+2)))
                     match_location = messages_text.match(pattern_location)
                     match_IoT = messages_text.match(pattern_IoTid)
                     var lat, lon, id
@@ -37,7 +40,7 @@ function load_notifications_panel(){
                     row = {
                         'ID IoT device' : id,
                         'Location' : lat + ',' + lon,
-                        'Date' : timestamp,
+                        'Date' : converted_date,
                         'Notification sent to': addresses,
                         'Link Maps': "<a href="+link+" target='_blank' class='link'><img src='img/map.png' width='35'></a>"
                     }
@@ -48,7 +51,6 @@ function load_notifications_panel(){
                     table.destroy()
                 }
                 var table = $("#email-table")
-                console.log(messages_obj)
                 table = table.DataTable({
                     "data": messages_obj,
                     "columns":[
