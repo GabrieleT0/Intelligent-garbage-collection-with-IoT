@@ -18,6 +18,19 @@ aws ses verify-email-identity --email-address sensor.error@iotgarbagecollection.
 aws s3api create-bucket --bucket iot-devices-metadata --endpoint-url http://localhost:4566
 aws s3api put-object --bucket iot-devices-metadata --key iot_devices --body IoTDevices_info.json --endpoint-url http://localhost:4566
 
+aws dynamodb create-table \
+    --table-name Bins_Salerno \
+    --key-schema \
+        AttributeName=device_id,KeyType=HASH \
+        AttributeName=measure_date,KeyType=RANGE \
+    --attribute-definitions \
+        AttributeName=device_id,AttributeType=N \
+        AttributeName=measure_date,AttributeType=S\
+    --provisioned-throughput \
+        ReadCapacityUnits=10,WriteCapacityUnits=10 \
+    --table-class STANDARD \
+    --endpoint-url http://localhost:4566 >/dev/null
+
 zip iotDevices.zip IoTDevices.py
 aws lambda create-function \
     --function-name iot_devices_lambda \
@@ -45,5 +58,5 @@ aws lambda add-permission \
 aws events put-targets --rule my-scheduled-rule --targets file://targets.json --endpoint-url http://localhost:4566
 
 cd src/
-python create_table.py
+#python create_table.py
 sh deploy_APIG_lambda.sh
