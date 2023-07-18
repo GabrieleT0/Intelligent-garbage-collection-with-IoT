@@ -30,7 +30,7 @@ Lastly, the other 3 lambda functions are invoked through the RESTful api, built 
 
 ## Technologies used for the front-end
 HTML and JavaScript were used for the front-end to generate the dynamic content retrieved from the REST api. The following libraries were used in the JavaScript part:
-- [Leaflet](https://leafletjs.com/), for creating dynamic maps based on (OpenStreetMap[https://www.openstreetmap.org/])
+- [Leaflet](https://leafletjs.com/), for creating dynamic maps based on [OpenStreetMap](https://www.openstreetmap.org/)
 - [Leaflet routing machine](http://www.liedman.net/leaflet-routing-machine/tutorials/), a library that integrates with leaflets for creating routes.
 - [Valhalla](https://valhalla.github.io/valhalla/), a simple service that allows you to calculate the best route between multiple itineraries.
 - [Bulma](https://bulma.io/), is a framework that simply allows you to create responsive and modern UI.
@@ -46,12 +46,17 @@ cd Intelligent-garbage-collection-with-IoT
 mkdir custom_files
 #This downloads some files which are needed to calculate the route, in particular, we only download data relating to southern Italy.
 wget -O custom_files/italy-sud-latest.osm.pbf https://download.geofabrik.de/europe/italy/sud-latest.osm.pbf
+#Install jq to enable the script to save same info in JSON file
+```
+Install jq to allow the script to save and parse json files:
+```sh
+sudo apt-get install jq
 ```
 Build the container which includes localstack for AWS services, Valhalla for routing and ngnix for hosting the web app.
 ```sh
-docker compose up
+docker-compose up
 ```
-Lastly, launch the setup.sh script to build all the AWS services needed and deploy the lambda functions.
+Lastly, launch the ```setup.sh``` script to build all the AWS services needed and deploy the lambda functions (to run the script you should have the aws CLI installed, details [here](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html), then you need to configure it with the `aws configure comand`, and use us-east-1 as region and JSON as output format).
 ```sh
 sh setup.sh
 ```
