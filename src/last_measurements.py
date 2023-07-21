@@ -3,27 +3,22 @@ import datetime
 import random
 import json
 from boto3.dynamodb.conditions import Key, Attr
-    
+import os
 def lambda_handler(event, context):
-#def test():
-    dynomdb = boto3.resource('dynamodb', endpoint_url="http://host.docker.internal:4566")
+    endpoint_url = f'http://{os.environ.get("LOCALSTACK_HOSTNAME")}:{os.environ.get("EDGE_PORT")}'
+    dynomdb = boto3.resource('dynamodb', endpoint_url=endpoint_url)
     table = dynomdb.Table('Bins_Salerno')
-    
-    #Scan for all items in the DB for find all device's id
-    response = table.scan()
-    data = response['Items']
-    while 'LastEvaluatedKey' in response:
-        response = table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
-        data.extend(response['Items'])
-    
-    #Crete a list of device's ids
-    items = response['Items']
+
+    #load info of our simulated IoT device from a JSON file stored in a S3 Bucket
+    s3 = boto3.resource('s3', endpoint_url=endpoint_url)
+    bucket = s3.Bucket('iot-devices-metadata')
+    object = bucket.Object('iot_devices')
+    file_content = object.get()['Body'].read().decode('utf-8')
+    iot_devices = json.loads(file_content)
+
     ids = []
-    for item in items:
-        print(item) 
-        ids.append(int(item['device_id']))
-    ids = list(dict.fromkeys(ids))
-    ids.sort()
+    for device in iot_devices:
+        ids.append(device["device_id"])
 
     #Get all the last IoT device measurements 
     last_measuremenst = []
@@ -45,31 +40,3 @@ def lambda_handler(event, context):
     }
 
     return response
-
-    '''
-    operation = event['operation']
-
-    operations = {
-        'create': ddb_create,
-        'read': ddb_read,
-        'update': ddb_update,
-        'delete': ddb_delete,
-        'echo': echo,
-    }
-
-    if operation in operations:
-        return operations[operation](event.get('payload'))
-    else:
-        raise ValueError('Unrecognized operation "{}"'.format(operation))
-    '''
-
-'''
-PAYLOAD EXAMPLE
-{
-    "operation": "echo",
-    "payload": {
-        "somekey1": "somevalue1",
-        "somekey2": "somevalue2"
-    }
-}
-'''
