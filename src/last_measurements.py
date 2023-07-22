@@ -23,12 +23,15 @@ def lambda_handler(event, context):
     #Get all the last IoT device measurements 
     last_measuremenst = []
     for id in ids:
-        response = table.query(KeyConditionExpression=Key('device_id').eq(id),ScanIndexForward = False,Limit=1)
-        device_id = str(response['Items'][0]['device_id'])
-        response['Items'][0]['device_id'] = device_id
-        
-        last_measuremenst.append(response['Items'][0])
-    
+        try:
+            response = table.query(KeyConditionExpression=Key('device_id').eq(id),ScanIndexForward = False,Limit=1)
+            device_id = str(response['Items'][0]['device_id'])
+            response['Items'][0]['device_id'] = device_id
+            
+            last_measuremenst.append(response['Items'][0])
+        except IndexError as e: #it may happen that a device with a specific id fails and has no value in the db
+            continue 
+
     response = {
         "isBase64Encoded": False,
         'statusCode': 200,
