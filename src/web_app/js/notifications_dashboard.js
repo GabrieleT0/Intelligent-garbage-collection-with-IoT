@@ -21,6 +21,8 @@ function load_notifications_panel(){
                     timestamp = messages[i].Timestamp
                     const date = new Date(timestamp);
                     date.setHours(date.getHours()+2)
+                    const options = { day: "numeric", month: "long", year: "numeric", hour: "numeric", minute: "numeric", second: "numeric" };
+                    const formattedDate = date.toLocaleString("en", options);
                     converted_date = JSON.stringify(date.toISOString(date.setHours(date.getHours()+2)))
                     match_location = messages_text.match(pattern_location)
                     match_IoT = messages_text.match(pattern_IoTid)
@@ -40,7 +42,7 @@ function load_notifications_panel(){
                     row = {
                         'ID IoT device' : id,
                         'Location' : lat + ',' + lon,
-                        'Date' : converted_date,
+                        'Date' : formattedDate,
                         'Notification sent to': addresses,
                         'Link Maps': "<a href="+link+" target='_blank' class='link'><img src='img/map.png' width='35'></a>"
                     }
@@ -65,3 +67,28 @@ function load_notifications_panel(){
         })
     })
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Get all "navbar-burger" elements
+    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+  
+    // Check if there are any navbar burgers
+    if ($navbarBurgers.length > 0) {
+  
+      // Add a click event on each of them
+      $navbarBurgers.forEach( el => {
+        el.addEventListener('click', () => {
+  
+          // Get the target from the "data-target" attribute
+          const target = el.dataset.target;
+          const $target = document.getElementById(target);
+  
+          // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+          el.classList.toggle('is-active');
+          $target.classList.toggle('is-active');
+  
+        });
+      });
+    }
+  });
