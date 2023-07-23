@@ -5,7 +5,6 @@ import json
 from boto3.dynamodb.conditions import Key, Attr
 
 def lambda_handler(event, context):
-#def test(id):
     dynomdb = boto3.resource('dynamodb', endpoint_url="http://host.docker.internal:4566")
     table = dynomdb.Table('Bins_Salerno')
 
