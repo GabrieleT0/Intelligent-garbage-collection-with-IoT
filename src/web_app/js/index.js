@@ -86,20 +86,22 @@ function createMap(map){
             }
             else if(jsonData[i].trash_level == 'TO BE EMPTIED'){
                 urlIcon = 'img/full-bin.png'
-                message = `<b>Sono pieno, vieni a prendermi!</b>`
+                message = `<b>I'm full, come and get me!</b>`
             }
 
             const utcDate = jsonData[i]['measure_date'];
             const date = new Date(utcDate);
             date.setHours(date.getHours()+2)
-            converted_date = JSON.stringify(date.toISOString(date.setHours(date.getHours()+2)))
+            const options = { day: "numeric", month: "long", year: "numeric", hour: "numeric", minute: "numeric", second: "numeric" };
+            const formattedDate = date.toLocaleString("en", options);
 
             //waypoints.push(L.latLng(lat, long))
             var binIcon = new BinIcon({iconUrl: urlIcon})
             var marker = L.marker([lat, long],{icon: binIcon}).addTo(map);
             //Here we can personalize the popup on the marker when it is clicked
             marker.bindPopup(message + `<br><p>Distance of the garbage from the top: <b>${jsonData[i]['distance(cm)']} cm </b>
-                                        <br><p>Measure date: <b>${converted_date}<b>`);
+                                        <p>Measure date: <b>${formattedDate}</b>
+                                        <p>See all measurements <a href="devices_data.html?id=${jsonData[i].device_id}" target="_blank">here</a><p>`);
         }
     })
     //Lastly, render the map
