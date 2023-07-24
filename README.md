@@ -36,9 +36,13 @@ HTML and JavaScript were used for the front-end to generate the dynamic content 
 - [Bulma](https://bulma.io/), is a framework that simply allows you to create responsive and modern UI.
 
 # How to use
-Clone this repository
+Clone this repository:
 ```sh
 git clone https://github.com/GabrieleT0/Intelligent-garbage-collection-with-IoT.git
+```
+Install the requirements:
+```sh
+pip install -r requirements.txt
 ```
 Move to the directory of the project, and create the custom_files directory (is required to host in local Valhalla).
 ```sh
