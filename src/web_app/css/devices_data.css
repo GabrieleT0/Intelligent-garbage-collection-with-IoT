@@ -1,0 +1,4 @@
+.panel {
+    max-height: 600px; /* Modifica l'altezza massima a tua scelta */
+    overflow-y: auto; /* Abilita lo scorrimento verticale */
+}

@@ -6,6 +6,7 @@
         <title>IoT Garbage Collection</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
         <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" href="css/devices_data.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
         <link rel="icon" type="image/x-icon" href="img/trash.png">
         <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -38,6 +39,9 @@
                 <a class="navbar-item is-size-6 has-text-weight-medium" href="notifications_dashboard.html">
                     Notifications panel
                 </a>
+                <a class="navbar-item is-size-6 has-text-weight-medium" href="devices_data.html?id=0">
+                  View all data
+                </a>
               </div>
           
               <div class="navbar-end">
@@ -56,12 +60,23 @@
               </div>
             </div>
           </nav>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-        <script src="js/devices_data.js"></script>
-        <script src="js/index.js"></script>
-        <figure class="highcharts-figure">
-            <div id="chart-container" style="margin-top: 20px;"></div>
-        </figure>
+          <div class="columns">
+              <div id="sensors_list" class="panel is-info is-left has-fixed-size" style="width: 250px; margin-left: 20px;">
+                <p class="panel-heading">
+                  Select the IoT device
+                </p>
+                <p class="panel-tabs">
+                </p>
+              </div>
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+          <script src="js/index.js"></script>
+          <script src="js/devices_data.js"></script>
+          <div class="column">
+            <figure class="highcharts-figure">
+                <div id="chart-container" style="margin-top: 20px; width: 95%;"></div>
+            </figure>
+          </div>
+        </div>
         <script>display_IoT_device_data()</script>
         <footer class="footer">
             <div class="content has-text-centered">
