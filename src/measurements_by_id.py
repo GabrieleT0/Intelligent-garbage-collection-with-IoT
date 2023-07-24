@@ -1,8 +1,6 @@
 import boto3
-import datetime
-import random
 import json
-from boto3.dynamodb.conditions import Key, Attr
+from boto3.dynamodb.conditions import Key
 
 def lambda_handler(event, context):
     dynomdb = boto3.resource('dynamodb', endpoint_url="http://host.docker.internal:4566")

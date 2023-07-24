@@ -1,6 +1,4 @@
 import boto3
-import datetime
-import random
 import json
 from boto3.dynamodb.conditions import Key, Attr
 import os

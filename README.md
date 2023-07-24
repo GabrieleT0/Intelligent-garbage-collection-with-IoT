@@ -64,6 +64,7 @@ Lastly, launch the ```setup.sh``` script to build all the AWS services needed an
 ```sh
 sh setup.sh
 ```
+Go to [```http://localhost```](http://localhost) to see the data in the web-app.
 
 ### What the setup.sh script does (only a few instructions are given, those considered most important)
 1. Queue Creation
